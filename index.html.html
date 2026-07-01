@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>氣象與海象監測</title>
+    <!-- 引入 PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #444;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-title::before {
+            content: "📌";
+            margin-right: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            background-color: #f8fbff;
+        }
+
+        .rain .card { border-left-color: #4facfe; }
+        .ocean .card { border-left-color: #00f2fe; }
+        .typhoon .card { border-left-color: #fa709a; }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌦️ 氣象與海象監測儀表板</h1>
+
+        <div class="category rain">
+            <div class="category-title">降雨監測 (落雨小幫手)</div>
+            <div class="grid">
+                <a href="https://watch.ncdr.nat.gov.tw/appv2/" target="_blank" class="card">即時預警</a>
+                <a href="https://watch.ncdr.nat.gov.tw/appv3/" target="_blank" class="card">3小時預測</a>
+                <a href="https://watch.ncdr.nat.gov.tw/appv3_6hr/" target="_blank" class="card">6小時預測</a>
+            </div>
+        </div>
+
+        <div class="category ocean">
+            <div class="category-title">海象與潮汐預報</div>
+            <div class="grid">
+                <a href="https://www.cwa.gov.tw/V8/C/M/tide.html" target="_blank" class="card">潮汐預報</a>
+                <a href="https://watch.ncdr.nat.gov.tw/watch_obswavemap" target="_blank" class="card">浪高監測</a>
+                <a href="https://www.cwa.gov.tw/V8/C/M/tide_height.html" target="_blank" class="card">潮高預報圖</a>
+            </div>
+        </div>
+
+        <div class="category typhoon">
+            <div class="category-title">颱風與綜合氣象</div>
+            <div class="grid">
+                <a href="https://watch.ncdr.nat.gov.tw/watch_tracks_pro" target="_blank" class="card">颱風監測 (NCDR)</a>
+                <a href="https://typhoon.tw/" target="_blank" class="card">颱風監測 (台灣颱風資訊中心)</a>
+                <a href="https://www.windy.com/" target="_blank" class="card">Windy 全球氣象 (Free)</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>※ 點擊按鈕將於新分頁開啟對應的氣象監測網站</p>
+        </footer>
+    </div>
+
+    <!-- 註冊 Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker 註冊成功'))
+                    .catch(err => console.log('Service Worker 註冊失敗', err));
+            });
+        }
+    </script>
+</body>
+</html>
